@@ -20,8 +20,8 @@ export function StatusBar({ engineStatus, speed }: StatusBarProps) {
   }, []);
 
   return (
-    <footer className="flex items-center justify-between border-t border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-4 py-1 text-[10px] text-slate-500">
-      <div className="flex items-center gap-4">
+    <footer className="flex flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border-t border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-4 py-1 text-[10px] text-slate-500">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5">
         <span className="flex items-center gap-1.5">
           <span
             className={`inline-block h-1.5 w-1.5 rounded-full ${

@@ -33,7 +33,7 @@ export function HeatmapPanel() {
 
   return (
     <div className="h-full overflow-y-auto p-2">
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
         {cells.map((cell) => (
           <div
             key={cell.symbol}

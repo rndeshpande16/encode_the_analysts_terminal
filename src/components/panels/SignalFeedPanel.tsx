@@ -35,7 +35,7 @@ export function SignalFeedPanel() {
           <div
             key={anomaly.id}
             className={clsx(
-              "flex items-start gap-2 rounded border border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-2 py-1.5 text-[11px]",
+              "flex flex-wrap items-start gap-x-2 gap-y-0.5 rounded border border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-2 py-1.5 text-[11px]",
               i === 0 && "animate-slide-down",
             )}
           >

@@ -61,7 +61,9 @@ export function InstrumentSelector() {
         className="flex items-center gap-1.5 rounded border border-[var(--color-terminal-border)] bg-[var(--color-terminal-panel)] px-2 py-0.5 text-xs text-slate-300 transition-colors hover:border-slate-500"
       >
         <span className="font-medium">{active}</span>
-        <span className="text-slate-500">{activeInstrument?.name}</span>
+        <span className="hidden text-slate-500 sm:inline">
+          {activeInstrument?.name}
+        </span>
         <svg
           className={clsx(
             "h-3 w-3 text-slate-500 transition-transform",
@@ -77,7 +79,7 @@ export function InstrumentSelector() {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 z-50 mt-1 w-64 overflow-hidden rounded-md border border-slate-700 bg-[#111827] shadow-xl">
+        <div className="absolute top-full left-0 z-50 mt-1 w-[min(16rem,calc(100vw-2rem))] overflow-hidden rounded-md border border-slate-700 bg-[#111827] shadow-xl">
           <div className="border-b border-slate-700 p-1.5">
             <input
               ref={inputRef}
@@ -98,9 +100,7 @@ export function InstrumentSelector() {
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filtered.length === 0 ? (
-              <div className="px-3 py-2 text-xs text-slate-500">
-                No matches
-              </div>
+              <div className="px-3 py-2 text-xs text-slate-500">No matches</div>
             ) : (
               filtered.map((item) => (
                 <button

@@ -52,7 +52,7 @@ export function ThemeSelector() {
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-1 w-56 overflow-hidden rounded-lg border shadow-xl"
+          className="absolute right-0 top-full z-50 mt-1 w-[min(14rem,calc(100vw-2rem))] overflow-hidden rounded-lg border shadow-xl"
           style={{
             backgroundColor: "var(--color-terminal-surface)",
             borderColor: "var(--color-terminal-border)",

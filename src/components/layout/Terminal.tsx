@@ -24,10 +24,10 @@ export function Terminal({
   onMarketSwitch,
 }: TerminalProps) {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full max-w-full flex-col overflow-x-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-4 py-2">
-        <div className="flex items-center gap-3">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-4 py-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-3">
           <h1 className="text-sm font-semibold tracking-widest text-slate-300 uppercase">
             Encode Terminal
           </h1>
@@ -61,7 +61,7 @@ export function Terminal({
           <InstrumentSelector />
           <TimeframeSelector />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-3">
           <ThemeSelector />
           <EngineControls
             status={engineStatus}

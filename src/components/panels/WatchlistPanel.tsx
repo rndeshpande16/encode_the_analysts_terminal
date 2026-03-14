@@ -84,8 +84,8 @@ export function WatchlistPanel() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="overflow-y-auto flex-1">
-        <table className="w-full text-xs">
+      <div className="overflow-x-auto overflow-y-auto flex-1">
+        <table className="w-full min-w-0 text-xs">
           <thead className="sticky top-0 bg-[var(--color-terminal-panel)]">
             <tr className="text-left text-[10px] text-slate-500 uppercase">
               <th className="px-2 py-1">Symbol</th>

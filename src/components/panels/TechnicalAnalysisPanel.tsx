@@ -149,7 +149,7 @@ export function TechnicalAnalysisPanel() {
         {analysis.signals.map((sig) => (
           <div
             key={sig.indicator}
-            className="flex items-center justify-between rounded border border-slate-700/50 bg-slate-800/30 px-2 py-1"
+            className="flex flex-wrap items-center justify-between gap-1 rounded border border-slate-700/50 bg-slate-800/30 px-2 py-1"
           >
             <span className="text-slate-400">{sig.indicator}</span>
             <div className="flex items-center gap-2">

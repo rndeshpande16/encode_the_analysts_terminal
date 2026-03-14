@@ -26,6 +26,8 @@ body,
   margin: 0;
   overflow: hidden;
   font-family: var(--font-mono);
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* react-grid-layout overrides */

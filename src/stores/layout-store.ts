@@ -9,15 +9,15 @@ interface LayoutState {
 }
 
 const DEFAULT_LAYOUT: LayoutItem[] = [
-  { i: "price-chart",      x: 0, y: 0,  w: 8, h: 8, minW: 4, minH: 4 },
-  { i: "watchlist",         x: 8, y: 0,  w: 4, h: 8, minW: 3, minH: 4 },
-  { i: "order-book",        x: 0, y: 8,  w: 3, h: 7, minW: 3, minH: 4 },
-  { i: "tech-analysis",     x: 3, y: 8,  w: 3, h: 7, minW: 3, minH: 4 },
-  { i: "signal-feed",       x: 6, y: 8,  w: 3, h: 7, minW: 3, minH: 3 },
-  { i: "fundamentals",      x: 9, y: 8,  w: 3, h: 4, minW: 3, minH: 3 },
-  { i: "statistics",         x: 9, y: 12, w: 3, h: 3, minW: 3, minH: 2 },
-  { i: "analyst-forecast",  x: 0, y: 15, w: 6, h: 5, minW: 3, minH: 3 },
-  { i: "heatmap",           x: 6, y: 15, w: 6, h: 5, minW: 3, minH: 2 },
+  { i: "price-chart", x: 0, y: 0, w: 8, h: 8, minW: 4, minH: 4 },
+  { i: "watchlist", x: 8, y: 0, w: 4, h: 8, minW: 3, minH: 4 },
+  { i: "order-book", x: 0, y: 8, w: 3, h: 7, minW: 3, minH: 4 },
+  { i: "tech-analysis", x: 3, y: 8, w: 3, h: 7, minW: 3, minH: 4 },
+  { i: "signal-feed", x: 6, y: 8, w: 3, h: 7, minW: 3, minH: 3 },
+  { i: "fundamentals", x: 9, y: 8, w: 3, h: 4, minW: 3, minH: 3 },
+  { i: "statistics", x: 9, y: 12, w: 3, h: 3, minW: 3, minH: 2 },
+  { i: "analyst-forecast", x: 0, y: 15, w: 6, h: 5, minW: 3, minH: 3 },
+  { i: "heatmap", x: 6, y: 15, w: 6, h: 5, minW: 3, minH: 2 },
 ];
 
 const DEFAULT_LAYOUTS: ResponsiveLayouts = {
@@ -26,6 +26,14 @@ const DEFAULT_LAYOUTS: ResponsiveLayouts = {
     ...l,
     w: Math.min(l.w, 6),
     x: l.x > 6 ? 0 : l.x,
+  })),
+  sm: DEFAULT_LAYOUT.map((l, idx) => ({
+    ...l,
+    x: 0,
+    y: idx * 6,
+    w: 1,
+    h: 6,
+    minW: 1,
   })),
 };
 
@@ -37,7 +45,7 @@ export const useLayoutStore = create<LayoutState>()(
       resetLayout: () => set({ layouts: DEFAULT_LAYOUTS }),
     }),
     {
-      name: "encode-terminal-layout-v4",
+      name: "encode-terminal-layout-v5",
     },
   ),
 );

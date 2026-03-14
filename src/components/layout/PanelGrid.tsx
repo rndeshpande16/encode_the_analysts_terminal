@@ -15,15 +15,23 @@ import { AnalystForecastPanel } from "../panels/AnalystForecastPanel.tsx";
 import "react-grid-layout/css/styles.css";
 
 const PANELS = [
-  { id: "price-chart",   title: "Price Chart",          Component: PriceChartPanel },
-  { id: "watchlist",      title: "Watchlist",             Component: WatchlistPanel },
-  { id: "order-book",     title: "Order Book",            Component: OrderBookPanel },
-  { id: "tech-analysis",  title: "Technical Analysis",    Component: TechnicalAnalysisPanel },
-  { id: "signal-feed",    title: "Signals",               Component: SignalFeedPanel },
-  { id: "fundamentals",   title: "Fundamentals",          Component: FundamentalsPanel },
-  { id: "statistics",     title: "Statistics",             Component: StatisticsPanel },
-  { id: "analyst-forecast", title: "Analyst Forecast",    Component: AnalystForecastPanel },
-  { id: "heatmap",        title: "Heatmap",               Component: HeatmapPanel },
+  { id: "price-chart", title: "Price Chart", Component: PriceChartPanel },
+  { id: "watchlist", title: "Watchlist", Component: WatchlistPanel },
+  { id: "order-book", title: "Order Book", Component: OrderBookPanel },
+  {
+    id: "tech-analysis",
+    title: "Technical Analysis",
+    Component: TechnicalAnalysisPanel,
+  },
+  { id: "signal-feed", title: "Signals", Component: SignalFeedPanel },
+  { id: "fundamentals", title: "Fundamentals", Component: FundamentalsPanel },
+  { id: "statistics", title: "Statistics", Component: StatisticsPanel },
+  {
+    id: "analyst-forecast",
+    title: "Analyst Forecast",
+    Component: AnalystForecastPanel,
+  },
+  { id: "heatmap", title: "Heatmap", Component: HeatmapPanel },
 ];
 
 export function PanelGrid() {
@@ -51,13 +59,13 @@ export function PanelGrid() {
   );
 
   return (
-    <div ref={containerRef} className="h-full overflow-y-auto">
+    <div ref={containerRef} className="h-full overflow-x-hidden overflow-y-auto">
       {width > 0 && (
         <ResponsiveGridLayout
           width={width}
           layouts={layouts}
-          breakpoints={{ lg: 1200, md: 768 }}
-          cols={{ lg: 12, md: 6 }}
+          breakpoints={{ lg: 1200, md: 768, sm: 480 }}
+          cols={{ lg: 12, md: 6, sm: 1 }}
           rowHeight={40}
           margin={[6, 6] as const}
           containerPadding={[6, 6] as const}
