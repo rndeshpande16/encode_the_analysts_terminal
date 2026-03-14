@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import "./styles/animations.css";
+
+@theme {
+  --color-terminal-bg: #0a0e17;
+  --color-terminal-surface: #111827;
+  --color-terminal-panel: #1a2332;
+  --color-terminal-border: #1e293b;
+  --color-positive: #22c55e;
+  --color-negative: #ef4444;
+  --color-neutral: #3b82f6;
+  --color-anomaly: #f59e0b;
+  --color-anomaly-glow: rgba(245, 158, 11, 0.15);
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+  --font-mono:
+    "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", ui-monospace,
+    monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+/* react-grid-layout overrides */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 100;
+  opacity: 0.9;
+}
+
+.react-grid-placeholder {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border: 1px dashed rgba(59, 130, 246, 0.4) !important;
+  border-radius: 8px;
+}
+
+.react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.react-resizable-handle::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid rgba(148, 163, 184, 0.3);
+  border-bottom: 2px solid rgba(148, 163, 184, 0.3);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* Tabular numbers for consistent alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

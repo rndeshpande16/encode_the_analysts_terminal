@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Encode Terminal — Technical Documentation</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #30363d;
+        --text: #e6edf3;
+        --muted: #8b949e;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --red: #f85149;
+        --amber: #d29922;
+        --purple: #bc8cff;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+          sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.55;
+        color: var(--text);
+        background: var(--bg);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        padding: 40px;
+      }
+
+      /* Cover page */
+      .cover {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          #0a0e17 0%,
+          #111827 50%,
+          #0a0e17 100%
+        );
+        page-break-after: always;
+        position: relative;
+        overflow: hidden;
+      }
+      .cover::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 600px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+          circle,
+          rgba(88, 166, 255, 0.08) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+      .cover h1 {
+        font-size: 42pt;
+        font-weight: 800;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+        position: relative;
+      }
+      .cover .subtitle {
+        font-size: 14pt;
+        color: var(--muted);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 48px;
+      }
+      .cover .meta {
+        font-size: 10pt;
+        color: var(--muted);
+        position: relative;
+      }
+      .cover .meta span {
+        display: block;
+        margin: 4px 0;
+      }
+      .cover .tag {
+        display: inline-block;
+        padding: 2px 10px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 8.5pt;
+        color: var(--muted);
+        margin: 2px;
+      }
+      .cover .tags {
+        margin-top: 24px;
+      }
+
+      /* Page content */
+      .content {
+        padding: 0;
+      }
+      section {
+        page-break-inside: avoid;
+        margin-bottom: 18px;
+      }
+      h2 {
+        font-size: 16pt;
+        font-weight: 700;
+        color: var(--accent);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 6px;
+        margin: 28px 0 14px 0;
+        page-break-after: avoid;
+      }
+      h3 {
+        font-size: 12pt;
+        font-weight: 600;
+        color: var(--text);
+        margin: 18px 0 8px 0;
+        page-break-after: avoid;
+      }
+      h4 {
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: var(--muted);
+        margin: 12px 0 4px 0;
+      }
+      p {
+        margin: 6px 0;
+      }
+      ul,
+      ol {
+        margin: 6px 0 6px 22px;
+      }
+      li {
+        margin: 3px 0;
+      }
+
+      code {
+        font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+        font-size: 9pt;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+      }
+      pre {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 12px 14px;
+        overflow-x: auto;
+        font-family: "JetBrains Mono", "Fira Code", monospace;
+        font-size: 8.5pt;
+        line-height: 1.5;
+        margin: 8px 0;
+        page-break-inside: avoid;
+      }
+      pre code {
+        background: transparent;
+        border: none;
+        padding: 0;
+        font-size: inherit;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+        font-size: 9.5pt;
+        page-break-inside: avoid;
+      }
+      th,
+      td {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        text-align: left;
+      }
+      th {
+        background: var(--surface);
+        color: var(--accent);
+        font-weight: 600;
+      }
+      td {
+        color: var(--text);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 10px;
+        font-size: 8pt;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      .badge-green {
+        background: rgba(63, 185, 80, 0.15);
+        color: var(--green);
+      }
+      .badge-red {
+        background: rgba(248, 81, 73, 0.15);
+        color: var(--red);
+      }
+      .badge-blue {
+        background: rgba(88, 166, 255, 0.15);
+        color: var(--accent);
+      }
+      .badge-amber {
+        background: rgba(210, 153, 34, 0.15);
+        color: var(--amber);
+      }
+      .badge-purple {
+        background: rgba(188, 140, 255, 0.15);
+        color: var(--purple);
+      }
+
+      .flow-diagram {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 16px;
+        margin: 12px 0;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 8.5pt;
+        line-height: 1.6;
+        white-space: pre;
+        page-break-inside: avoid;
+      }
+
+      .file-tree {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 8pt;
+        line-height: 1.55;
+        margin: 10px 0;
+        column-count: 2;
+        column-gap: 30px;
+      }
+      .file-tree .dir {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .file-tree .file {
+        color: var(--muted);
+      }
+
+      .callout {
+        border-left: 3px solid var(--accent);
+        background: rgba(88, 166, 255, 0.06);
+        padding: 10px 14px;
+        border-radius: 0 6px 6px 0;
+        margin: 12px 0;
+        font-size: 9.5pt;
+      }
+      .callout.amber {
+        border-left-color: var(--amber);
+        background: rgba(210, 153, 34, 0.06);
+      }
+      .callout.green {
+        border-left-color: var(--green);
+        background: rgba(63, 185, 80, 0.06);
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .panel-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px 14px;
+        page-break-inside: avoid;
+      }
+      .panel-card h4 {
+        margin-top: 0;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ COVER ============ -->
+    <div class="cover">
+      <h1>Encode</h1>
+      <div class="subtitle">Real-Time Market Terminal</div>
+      <div class="meta">
+        <span>Technical Documentation</span>
+        <span style="margin-top: 12px; font-size: 9pt"
+          >A simulated financial market terminal with live price generation,<br />
+          candlestick charting, anomaly detection, and draggable panel
+          layout.</span
+        >
+        <div class="tags">
+          <span class="tag">React 19</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Vite 6</span>
+          <span class="tag">Tailwind CSS 4</span>
+          <span class="tag">Zustand 5</span>
+          <span class="tag">TradingView Charts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TABLE OF CONTENTS ============ -->
+    <div class="content">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><strong>Overview</strong> — What Encode is and what it does</li>
+        <li>
+          <strong>Architecture</strong> — Three-tier data flow and design
+          philosophy
+        </li>
+        <li><strong>Project Structure</strong> — File organization</li>
+        <li>
+          <strong>Data Engine</strong> — Price simulation, order books, and
+          anomaly injection
+        </li>
+        <li>
+          <strong>State Management</strong> — Zustand stores and data flow
+        </li>
+        <li>
+          <strong>UI Components</strong> — Panels, layout, shared components,
+          and controls
+        </li>
+        <li>
+          <strong>Hooks</strong> — Custom React hooks bridging engine and UI
+        </li>
+        <li>
+          <strong>Utility Libraries</strong> — Math, formatting, data structures
+        </li>
+        <li>
+          <strong>Styling &amp; Animations</strong> — Theme, keyframes, and
+          visual design
+        </li>
+        <li>
+          <strong>Performance Techniques</strong> — How 100ms ticks avoid
+          rendering bottlenecks
+        </li>
+        <li>
+          <strong>Instruments &amp; Data</strong> — The 8 simulated market
+          instruments
+        </li>
+        <li><strong>Dependencies</strong> — Third-party packages</li>
+      </ol>
+
+      <!-- ============ 1. OVERVIEW ============ -->
+      <h2>1. Overview</h2>
+
+      <p>
+        <strong>Encode</strong> is a single-page web application that simulates
+        a real-time financial market terminal, similar in spirit to a Bloomberg
+        Terminal or a trading desk workstation. It generates synthetic price
+        data for 8 financial instruments using Geometric Brownian Motion (GBM),
+        streams the data through multiple interactive panels, and includes a
+        statistical anomaly detection system that alerts the user when unusual
+        market events occur.
+      </p>
+
+      <h3>Key Capabilities</h3>
+      <ul>
+        <li>
+          <strong>Live price simulation</strong> — 8 instruments tick every
+          100ms with realistic stochastic price movement, momentum, and mean
+          reversion
+        </li>
+        <li>
+          <strong>Candlestick charting</strong> — Full OHLCV charts using
+          TradingView's lightweight-charts library with 15 selectable timeframes
+          (1m through All)
+        </li>
+        <li>
+          <strong>Order book depth</strong> — 10-level bid/ask ladder with
+          cumulative depth visualization
+        </li>
+        <li>
+          <strong>Technical analysis</strong> — 7 indicators computed in
+          real-time: RSI, MACD, Bollinger Bands, Stochastic, SMA crossover,
+          volume trend, and momentum (ROC)
+        </li>
+        <li>
+          <strong>Anomaly detection</strong> — Statistical z-score and volume
+          ratio analysis fires "whisper" alerts when anomalous events occur
+        </li>
+        <li>
+          <strong>Draggable panel layout</strong> — Bloomberg-style grid with
+          resizable, repositionable panels persisted to localStorage
+        </li>
+        <li>
+          <strong>Performance heatmap</strong> — Color-coded grid showing all
+          instrument returns at a glance
+        </li>
+        <li>
+          <strong>Historical warmup</strong> — Generates ~7 days of synthetic
+          history on startup so charts are immediately populated
+        </li>
+      </ul>
+
+      <!-- ============ 2. ARCHITECTURE ============ -->
+      <h2>2. Architecture</h2>
+
+      <p>
+        Encode follows a strict <strong>three-tier architecture</strong> that
+        separates data generation from state management from rendering. The core
+        insight is that high-frequency ticks (100ms interval) must bypass
+        React's reconciliation entirely — charts and numeric displays update via
+        imperative calls, while React only handles structural UI changes.
+      </p>
+
+      <div class="flow-diagram">
+        <span style="color: #58a6ff">ENGINE (Pure TypeScript, no React)</span>
+        <span style="color: #d29922">STATE (Zustand)</span>
+        <span style="color: #3fb950">RENDER (Selective React)</span>
+        ─────────────────────────────────────── ─────────────────────────
+        ────────────────────────────────── MarketEngine marketStore
+        PriceChartPanel ├─ GBM price stepper (per instrument) ├─ ticks per
+        instrument └─ subscribe() → series.update() ├─ CandleAggregator (15
+        timeframes) ├─ candles (15 TFs) ├─ OrderBook simulator ├─ order books
+        AnimatedNumber ├─ AnomalyInjector (Poisson process) └─ tick count └─ rAF
+        interpolation └─ AnomalyDetector (z-score) anomalyStore WhisperOverlay
+        setInterval(100ms) ├─ history (100 cap) └─ CSS animation on anomaly │ └─
+        active whispers │ callbacks WatchlistPanel
+        └──────────────────────────────→ store.getState().action() └─ 250ms
+        throttled selector │ └──────────────────→ React re-render (selective)
+      </div>
+
+      <div class="callout">
+        <strong>Design principle:</strong> The engine runs in a
+        <code>setInterval</code> loop completely outside React. It pushes data
+        into Zustand stores via <code>store.getState().action()</code> calls
+        (not hooks). Each panel then subscribes independently with its own
+        throttle interval, preventing the 100ms tick rate from causing rendering
+        storms.
+      </div>
+
+      <!-- ============ 3. PROJECT STRUCTURE ============ -->
+      <h2>3. Project Structure</h2>
+
+      <div class="file-tree">
+        <span class="dir">src/</span>
+        <span class="file">main.tsx</span> — React entry point
+        <span class="file">App.tsx</span> — Engine init + wiring
+        <span class="file">index.css</span> — Tailwind + theme
+
+        <span class="dir"> engine/</span> — Data generation (zero React)
+        <span class="file">types.ts</span> — Core type definitions
+        <span class="file">constants.ts</span> — Instruments + config
+        <span class="file">gbm.ts</span> — GBM price simulation
+        <span class="file">candle-aggregator.ts</span> — Tick → OHLCV
+        <span class="file">order-book-sim.ts</span> — Bid/ask depth
+        <span class="file">anomaly-injector.ts</span> — Poisson events
+        <span class="file">anomaly-detector.ts</span> — Z-score detection
+        <span class="file">market-engine.ts</span> — Orchestrator
+        <span class="file">technical-analysis.ts</span> — 7 indicators
+
+        <span class="dir"> stores/</span> — Zustand state layer
+        <span class="file">market-store.ts</span> — Ticks, candles, books
+        <span class="file">anomaly-store.ts</span> — Whisper queue
+        <span class="file">layout-store.ts</span> — Grid persistence
+        <span class="file">selection-store.ts</span> — Active instrument
+
+        <span class="dir"> hooks/</span> — React ↔ Engine bridge
+        <span class="file">use-lightweight-chart.ts</span>
+        <span class="file">use-animated-value.ts</span>
+        <span class="file">use-anomaly-pulse.ts</span>
+        <span class="file">use-throttled-selector.ts</span>
+
+        <span class="dir"> components/layout/</span>
+        <span class="file">Terminal.tsx</span> — Outer shell
+        <span class="file">PanelGrid.tsx</span> — Grid layout
+        <span class="file">Panel.tsx</span> — Panel chrome
+        <span class="file">StatusBar.tsx</span> — Status info
+
+        <span class="dir"> components/panels/</span> — 8 panels
+        <span class="file">PriceChartPanel.tsx</span>
+        <span class="file">OrderBookPanel.tsx</span>
+        <span class="file">SignalFeedPanel.tsx</span>
+        <span class="file">HeatmapPanel.tsx</span>
+        <span class="file">StatisticsPanel.tsx</span>
+        <span class="file">WatchlistPanel.tsx</span>
+        <span class="file">TechnicalAnalysisPanel.tsx</span>
+        <span class="file">FundamentalsPanel.tsx</span>
+
+        <span class="dir"> components/shared/</span>
+        <span class="file">AnimatedNumber.tsx</span>
+        <span class="file">SparkLine.tsx</span>
+        <span class="file">PulseIndicator.tsx</span>
+        <span class="file">Ticker.tsx</span>
+        <span class="file">WhisperOverlay.tsx</span>
+
+        <span class="dir"> components/controls/</span>
+        <span class="file">InstrumentSelector.tsx</span>
+        <span class="file">TimeframeSelector.tsx</span>
+        <span class="file">EngineControls.tsx</span>
+
+        <span class="dir"> lib/</span> — Utilities
+        <span class="file">math.ts</span> — Statistics functions
+        <span class="file">format.ts</span> — Number formatting
+        <span class="file">ring-buffer.ts</span> — Circular buffer
+        <span class="file">color.ts</span> — HSL interpolation
+        <span class="file">throttle.ts</span> — rAF + ms throttle
+
+        <span class="dir"> styles/</span>
+        <span class="file">animations.css</span> — Keyframes
+      </div>
+
+      <!-- ============ 4. DATA ENGINE ============ -->
+      <h2>4. Data Engine</h2>
+
+      <p>
+        The engine layer is pure TypeScript with zero React dependencies. It
+        runs entirely outside the React lifecycle, generating market data at a
+        configurable tick rate (default 100ms).
+      </p>
+
+      <h3>4.1 Geometric Brownian Motion (<code>gbm.ts</code>)</h3>
+
+      <p>
+        Price simulation uses the standard GBM model, the same stochastic
+        process underpinning the Black-Scholes option pricing model:
+      </p>
+
+      <pre><code>dS = S × (μ·dt + σ·√dt·Z)</code></pre>
+
+      <p>
+        Where <code>S</code> = current price, <code>μ</code> = drift (annualized
+        return), <code>σ</code> = volatility, <code>dt</code> = time step (in
+        years), and <code>Z</code> ~ N(0,1) is a standard normal random variable
+        generated via the Box-Muller transform.
+      </p>
+
+      <p>Two enhancements make the simulation more realistic:</p>
+      <ul>
+        <li>
+          <strong>Momentum</strong> — An exponentially weighted moving average
+          of recent returns (decay factor 0.95) creates short-term price
+          autocorrelation, so prices tend to continue in their current direction
+          briefly before reverting.
+        </li>
+        <li>
+          <strong>Mean reversion</strong> — A restoring force (strength 0.05)
+          gently pulls the price back toward a slowly drifting target price.
+          This prevents extreme drift and keeps instruments within reasonable
+          ranges.
+        </li>
+      </ul>
+
+      <p>
+        After computing the new price, the engine snaps it to the instrument's
+        tick-size grid, generates a realistic bid/ask spread, and computes
+        volume proportional to the absolute return (larger moves = higher
+        volume).
+      </p>
+
+      <h3>4.2 Candle Aggregation (<code>candle-aggregator.ts</code>)</h3>
+
+      <p>
+        Raw ticks are aggregated into OHLCV (Open, High, Low, Close, Volume)
+        candles for all 15 timeframes simultaneously. The aggregator floors each
+        tick's timestamp to the candle period boundary and either updates the
+        current candle (adjusting high/low/close/volume) or starts a new candle
+        when the period boundary is crossed.
+      </p>
+
+      <p>
+        Supported timeframes: <code>1m</code>, <code>5m</code>,
+        <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>4h</code>,
+        <code>1D</code>, <code>3D</code>, <code>1W</code>, <code>2W</code>,
+        <code>1M</code>, <code>3M</code>, <code>6M</code>, <code>1Y</code>,
+        <code>All</code>.
+      </p>
+
+      <h3>4.3 Order Book Simulation (<code>order-book-sim.ts</code>)</h3>
+
+      <p>
+        Generates synthetic depth with 10 bid levels and 10 ask levels around
+        the current mid price. Key characteristics:
+      </p>
+      <ul>
+        <li>Random spread (1–3 ticks wide)</li>
+        <li>
+          Deeper levels carry more liquidity (multiplier:
+          <code>1 + i × 0.3 + random</code>)
+        </li>
+        <li>Cumulative totals are accumulated for depth visualization</li>
+        <li>Regenerated every 3 ticks (not every tick) to reduce overhead</li>
+      </ul>
+
+      <h3>4.4 Anomaly System</h3>
+
+      <p>
+        The anomaly system has two halves — an <strong>injector</strong> that
+        creates anomalous events, and a <strong>detector</strong> that
+        identifies them statistically.
+      </p>
+
+      <h4>Anomaly Injector (<code>anomaly-injector.ts</code>)</h4>
+      <p>
+        Uses a Poisson process (λ ≈ 0.00025, roughly 1 event per 45 seconds at
+        100ms ticks) to randomly inject four types of anomalies:
+      </p>
+
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Probability</th>
+          <th>Effect</th>
+        </tr>
+        <tr>
+          <td><span class="badge badge-amber">price_spike</span></td>
+          <td>35%</td>
+          <td>Multiplies GBM volatility by 3–5×</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">volume_burst</span></td>
+          <td>25%</td>
+          <td>Multiplies volume by 5–20×</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-amber">momentum_shift</span></td>
+          <td>20%</td>
+          <td>Reverses direction with –(2–4×) multiplier</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-purple">correlation_break</span></td>
+          <td>20%</td>
+          <td>Amplifies movement by 1.5–2.5×</td>
+        </tr>
+      </table>
+
+      <h4>Anomaly Detector (<code>anomaly-detector.ts</code>)</h4>
+      <p>
+        Independently analyzes each tick against rolling statistical windows
+        (100 data points per symbol). Three detection methods run in parallel:
+      </p>
+
+      <ol>
+        <li>
+          <strong>Price z-score</strong> — Fires <code>price_spike</code> when
+          |z| &gt; 2.5 on the return distribution
+        </li>
+        <li>
+          <strong>Volume ratio</strong> — Fires <code>volume_burst</code> when
+          current volume exceeds 3× the rolling mean
+        </li>
+        <li>
+          <strong>Momentum shift</strong> — Compares fast EMA(10) vs slow
+          EMA(30) of returns; fires when the normalized gap exceeds 2.0 standard
+          deviations
+        </li>
+      </ol>
+
+      <p>
+        The detector enforces a 50-point warmup period and a 10-second cooldown
+        per symbol+type pair to prevent alert fatigue.
+      </p>
+
+      <h3>4.5 Technical Analysis (<code>technical-analysis.ts</code>)</h3>
+
+      <p>
+        Computes 7 standard technical indicators on the active instrument's
+        price history:
+      </p>
+
+      <table>
+        <tr>
+          <th>Indicator</th>
+          <th>Parameters</th>
+          <th>Buy Signal</th>
+          <th>Sell Signal</th>
+        </tr>
+        <tr>
+          <td>RSI</td>
+          <td>14-period</td>
+          <td>&lt; 30 (oversold)</td>
+          <td>&gt; 70 (overbought)</td>
+        </tr>
+        <tr>
+          <td>MACD</td>
+          <td>12/26/9</td>
+          <td>Histogram &gt; 0</td>
+          <td>Histogram &lt; 0</td>
+        </tr>
+        <tr>
+          <td>Bollinger %B</td>
+          <td>20-period, 2σ</td>
+          <td>%B &lt; 0.2</td>
+          <td>%B &gt; 0.8</td>
+        </tr>
+        <tr>
+          <td>Stochastic %K</td>
+          <td>14-period</td>
+          <td>&lt; 20</td>
+          <td>&gt; 80</td>
+        </tr>
+        <tr>
+          <td>SMA Cross</td>
+          <td>20/50</td>
+          <td>SMA20 &gt; SMA50</td>
+          <td>SMA20 &lt; SMA50</td>
+        </tr>
+        <tr>
+          <td>Volume Trend</td>
+          <td>5/20 avg</td>
+          <td>High vol + up move</td>
+          <td>High vol + down move</td>
+        </tr>
+        <tr>
+          <td>Momentum ROC</td>
+          <td>10-period</td>
+          <td>&gt; +2%</td>
+          <td>&lt; –2%</td>
+        </tr>
+      </table>
+
+      <p>
+        Signals are weighted and combined into a composite score (–100 to +100),
+        producing an overall verdict:
+        <span class="badge badge-green">STRONG BUY</span>,
+        <span class="badge badge-green">BUY</span>,
+        <span class="badge badge-blue">NEUTRAL</span>,
+        <span class="badge badge-red">SELL</span>, or
+        <span class="badge badge-red">STRONG SELL</span>.
+      </p>
+
+      <h3>4.6 Market Engine Orchestrator (<code>market-engine.ts</code>)</h3>
+
+      <p>
+        The <code>MarketEngine</code> class ties all engine components together:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Constructor</strong> — Initializes GBM state for each
+          instrument, creates injector and detector
+        </li>
+        <li>
+          <strong>Warmup</strong> —
+          <code>generateWarmup(2000, 300000)</code> creates 2000 historical
+          ticks per instrument (5-minute intervals ≈ 7 days of simulated
+          history), delivered as a single batch to avoid thousands of re-renders
+        </li>
+        <li>
+          <strong>Tick loop</strong> — Each 100ms interval iterates all
+          instruments: injects anomalies, steps GBM, emits tick callbacks, runs
+          detection, and regenerates order books every 3rd tick
+        </li>
+        <li>
+          <strong>Controls</strong> — <code>start()</code>, <code>stop()</code>,
+          <code>pause()</code>, <code>resume()</code>,
+          <code>setSpeed(multiplier)</code>
+        </li>
+      </ul>
+
+      <!-- ============ 5. STATE MANAGEMENT ============ -->
+      <h2>5. State Management</h2>
+
+      <p>
+        Four Zustand stores partition the application state by concern. Each
+        store is accessed outside React (via <code>getState()</code>) by the
+        engine and inside React (via selector hooks) by components.
+      </p>
+
+      <h3>5.1 Market Store (<code>market-store.ts</code>)</h3>
+      <p>The central data store. For each of the 8 instruments, maintains:</p>
+      <ul>
+        <li><code>lastTick</code> — Most recent price tick</li>
+        <li>
+          <code>candles</code> — A
+          <code>Map&lt;TimeFrame, RingBuffer&lt;Candle&gt;&gt;</code> with
+          500-capacity buffers for each of the 15 timeframes
+        </li>
+        <li><code>orderBook</code> — Current 10-level bid/ask depth</li>
+        <li><code>tickHistory</code> — Last 2000 ticks in a ring buffer</li>
+      </ul>
+
+      <p>Key actions:</p>
+      <ul>
+        <li>
+          <code>processTick(tick)</code> — Updates tick history and aggregates
+          candles across all timeframes. Uses
+          <code>RingBuffer.updateLast()</code> for O(1) candle updates.
+        </li>
+        <li>
+          <code>processBatch(ticks)</code> — Batch version for warmup data.
+          Processes all ticks in memory, then triggers a single
+          <code>set()</code> call.
+        </li>
+        <li>
+          <code>updateOrderBook(symbol, book)</code> — Updates order book for a
+          symbol.
+        </li>
+      </ul>
+
+      <h3>5.2 Anomaly Store (<code>anomaly-store.ts</code>)</h3>
+      <ul>
+        <li>
+          <code>anomalies[]</code> — Full history (capped at 100), newest first
+        </li>
+        <li>
+          <code>activeWhispers[]</code> — Currently displayed notifications (max
+          3), auto-expire after 5 seconds
+        </li>
+      </ul>
+
+      <h3>5.3 Layout Store (<code>layout-store.ts</code>)</h3>
+      <p>
+        Persisted to <code>localStorage</code> via Zustand's
+        <code>persist</code> middleware. Stores
+        <code>react-grid-layout</code> panel positions for
+        <code>lg</code> (1200px+, 12 columns) and <code>md</code> (768px+, 6
+        columns) breakpoints.
+      </p>
+
+      <h3>5.4 Selection Store (<code>selection-store.ts</code>)</h3>
+      <p>
+        Tracks the user's currently active instrument (default:
+        <code>AAPL</code>) and timeframe (default: <code>1m</code>). Changes
+        here drive chart and statistics panel updates.
+      </p>
+
+      <!-- ============ 6. UI COMPONENTS ============ -->
+      <h2>6. UI Components</h2>
+
+      <h3>6.1 Application Shell</h3>
+
+      <p>
+        <strong>App.tsx</strong> is the root component that wires the engine to
+        the stores on mount. It creates the <code>MarketEngine</code>, calls
+        <code>generateWarmup()</code> for historical data, starts the tick loop,
+        and renders the <code>Terminal</code> shell with the floating
+        <code>WhisperOverlay</code>.
+      </p>
+
+      <p>
+        <strong>Terminal.tsx</strong> provides the outer frame: a header bar
+        with controls, the panel grid body, and a status bar footer.
+      </p>
+
+      <p>
+        <strong>PanelGrid.tsx</strong> wraps <code>react-grid-layout</code>'s
+        <code>ResponsiveGridLayout</code> to render all 8 panels as draggable,
+        resizable windows within a 12-column grid.
+      </p>
+
+      <p>
+        <strong>Panel.tsx</strong> provides the panel chrome: a drag-handle
+        title bar with a <code>PulseIndicator</code>, anomaly-triggered border
+        glow, and an overflow-hidden content area.
+      </p>
+
+      <p>
+        <strong>StatusBar.tsx</strong> displays engine status (RUNNING/PAUSED
+        with animated indicator), simulation speed, total tick count, and a live
+        clock.
+      </p>
+
+      <h3>6.2 Panel Components</h3>
+
+      <div class="two-col">
+        <div class="panel-card">
+          <h4>PriceChartPanel</h4>
+          <p>
+            TradingView candlestick chart with volume histogram overlay. Uses
+            the <code>useLightweightChart</code> hook for imperative canvas
+            updates, bypassing React rendering entirely. Supports all 15
+            timeframes.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>OrderBookPanel</h4>
+          <p>
+            10-level bid/ask depth ladder. Asks above (red), bids below (green),
+            spread in the middle. Horizontal bars show cumulative depth. Updates
+            every 150ms via debounced subscription.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>WatchlistPanel</h4>
+          <p>
+            Table of all 8 instruments with live price, change%, volume, and SVG
+            sparklines (last 50 ticks). Rows flash green/red on price changes.
+            Click to select instrument. Updates every 250ms.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>TechnicalAnalysisPanel</h4>
+          <p>
+            7-indicator analysis with verdict badge (STRONG BUY through STRONG
+            SELL), composite score gauge (–100 to +100 gradient bar), and
+            individual signal list with strength bars. Updates every 1 second.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>StatisticsPanel</h4>
+          <p>
+            Key metrics for the selected instrument: OHLC, change, annualized
+            volatility, VWAP, SMA(20/50), EMA(12), bid/ask/spread, tick count,
+            max drawdown, avg volume. Uses <code>AnimatedNumber</code> for
+            smooth transitions. Updates every 500ms.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>SignalFeedPanel</h4>
+          <p>
+            Scrolling log of detected anomaly events. Each entry shows
+            timestamp, symbol, type badge (color-coded), message, and severity
+            bar. Newest entries animate in with <code>slide-down</code> effect.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>HeatmapPanel</h4>
+          <p>
+            4-column grid of all instruments, color-coded by performance
+            relative to base price. Green = gains, red = losses, intensity
+            scaled to magnitude (±5% saturation). Updates every 1 second with 1s
+            CSS transition.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>FundamentalsPanel</h4>
+          <p>
+            Static fundamental data: sector badge, 52-week range bar with price
+            marker, and a metrics grid (market cap, P/E, EPS, dividend yield,
+            revenue, profit margins, etc.). Conditionally renders metrics based
+            on instrument type.
+          </p>
+        </div>
+      </div>
+
+      <h3>6.3 Shared Components</h3>
+
+      <ul>
+        <li>
+          <strong>AnimatedNumber</strong> — Smoothly interpolates between
+          numeric values using <code>requestAnimationFrame</code> with cubic
+          ease-out. Flashes green/red on direction changes via CSS animations.
+        </li>
+        <li>
+          <strong>SparkLine</strong> — Lightweight SVG
+          <code>&lt;polyline&gt;</code> miniature chart. Auto-colors green
+          (uptrend) or red (downtrend).
+        </li>
+        <li>
+          <strong>PulseIndicator</strong> — 8px dot with expanding ring
+          animation on anomaly events.
+        </li>
+        <li>
+          <strong>Ticker</strong> — Composite component combining
+          <code>AnimatedNumber</code> with directional change display.
+        </li>
+        <li>
+          <strong>WhisperOverlay</strong> — Floating notification strip at the
+          top of the screen. Shows up to 3 active anomaly alerts with type icon,
+          symbol, message, severity bar, and auto-dismiss (5s). Uses backdrop
+          blur and slide-in animation.
+        </li>
+      </ul>
+
+      <h3>6.4 Controls</h3>
+
+      <ul>
+        <li>
+          <strong>InstrumentSelector</strong> — Styled dropdown of all 8
+          instruments
+        </li>
+        <li>
+          <strong>TimeframeSelector</strong> — Button bar for short timeframes
+          (1m–4h) plus a "More" dropdown for longer periods (1D–All)
+        </li>
+        <li>
+          <strong>EngineControls</strong> — Play/Pause toggle + speed buttons
+          (0.5×, 1×, 2×, 5×)
+        </li>
+      </ul>
+
+      <!-- ============ 7. HOOKS ============ -->
+      <h2>7. Hooks</h2>
+
+      <h3><code>useLightweightChart</code></h3>
+      <p>
+        The most critical hook in the application. Manages the TradingView
+        <code>lightweight-charts</code> lifecycle:
+      </p>
+      <ul>
+        <li>
+          Creates a chart instance with dark terminal styling when symbol or
+          timeframe changes
+        </li>
+        <li>
+          Adds a <code>CandlestickSeries</code> (green/red) and a
+          <code>HistogramSeries</code> for volume (pinned to bottom 20%)
+        </li>
+        <li>
+          Loads existing candle data from the market store on initialization
+        </li>
+        <li>
+          Sets up a <code>ResizeObserver</code> for responsive panel resizing
+        </li>
+        <li>
+          Subscribes to the Zustand store directly (not via React hooks) for
+          zero-latency <code>series.update()</code> calls on each new candle
+        </li>
+      </ul>
+
+      <h3><code>useAnimatedValue</code></h3>
+      <p>
+        Numerically interpolates from a current display value to a target value
+        over 300ms using <code>requestAnimationFrame</code>. Easing function:
+        cubic ease-out (<code>1 – (1–t)³</code>). Returns the current
+        interpolated value on each frame.
+      </p>
+
+      <h3><code>useAnomalyPulse</code></h3>
+      <p>
+        Maps active whispers to CSS glow classes for panels. Returns
+        <code>{ isActive, glowClass, anomalyType }</code>. Glow colors: amber
+        (price spike), blue (volume burst), purple (correlation break).
+      </p>
+
+      <h3><code>useThrottledValue</code></h3>
+      <p>
+        Generic trailing throttle for any value. Updates the returned value at
+        most once per <code>N</code> milliseconds. Used to decouple store update
+        frequency from panel render frequency.
+      </p>
+
+      <!-- ============ 8. UTILITIES ============ -->
+      <h2>8. Utility Libraries</h2>
+
+      <h3><code>RingBuffer&lt;T&gt;</code> (<code>ring-buffer.ts</code>)</h3>
+      <p>
+        A fixed-capacity circular buffer — the backbone data structure for all
+        time-series data. Prevents unbounded memory growth.
+      </p>
+      <ul>
+        <li>
+          Capacities: 2000 (ticks), 500 (candles per timeframe), 100 (anomaly
+          detector windows)
+        </li>
+        <li>
+          O(1) operations: <code>push()</code>, <code>last()</code>,
+          <code>updateLast()</code>, <code>get(index)</code>
+        </li>
+        <li>O(n) operations: <code>toArray()</code>, <code>lastN(n)</code></li>
+      </ul>
+
+      <h3><code>math.ts</code></h3>
+      <p>
+        Statistical primitives: <code>mean()</code>,
+        <code>stddev()</code> (Bessel-corrected), <code>zScore()</code>,
+        <code>ema()</code>, <code>sma()</code>, <code>clamp()</code>,
+        <code>normalRandom()</code> (Box-Muller with spare caching).
+      </p>
+
+      <h3><code>format.ts</code></h3>
+      <p>
+        Display formatting:
+        <code>formatPrice(price, tickSize)</code> auto-detects decimal
+        precision, <code>formatVolume()</code> outputs "1.5M"/"3.2K",
+        <code>formatTime()</code> uses 24-hour locale,
+        <code>formatChange()</code> adds ± signs.
+      </p>
+
+      <h3><code>color.ts</code></h3>
+      <p>
+        HSL interpolation between red (0°) and green (120°) via yellow (60°).
+        Used by the heatmap and sentiment coloring. Intensity scales with
+        magnitude, clamped at ±5%.
+      </p>
+
+      <h3><code>throttle.ts</code></h3>
+      <p>
+        Two throttle implementations: <code>throttleRAF(fn)</code> (batches to
+        animation frames, ~60fps) and <code>throttleMs(fn, ms)</code> (standard
+        time-based with trailing call).
+      </p>
+
+      <!-- ============ 9. STYLING ============ -->
+      <h2>9. Styling &amp; Animations</h2>
+
+      <h3>Theme</h3>
+      <p>
+        Dark terminal aesthetic using Tailwind CSS v4's
+        <code>@theme</code> directive for CSS custom properties:
+      </p>
+
+      <table>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+          <th>Usage</th>
+        </tr>
+        <tr>
+          <td><code>--color-terminal-bg</code></td>
+          <td><code>#0a0e17</code></td>
+          <td>Page background (very dark navy)</td>
+        </tr>
+        <tr>
+          <td><code>--color-terminal-surface</code></td>
+          <td><code>#111827</code></td>
+          <td>Elevated surfaces</td>
+        </tr>
+        <tr>
+          <td><code>--color-terminal-panel</code></td>
+          <td><code>#1a2332</code></td>
+          <td>Panel backgrounds</td>
+        </tr>
+        <tr>
+          <td><code>--color-terminal-border</code></td>
+          <td><code>#1e293b</code></td>
+          <td>Borders and separators</td>
+        </tr>
+        <tr>
+          <td><code>--color-positive</code></td>
+          <td><code>#22c55e</code></td>
+          <td>Price increase, buy signals</td>
+        </tr>
+        <tr>
+          <td><code>--color-negative</code></td>
+          <td><code>#ef4444</code></td>
+          <td>Price decrease, sell signals</td>
+        </tr>
+        <tr>
+          <td><code>--color-neutral</code></td>
+          <td><code>#3b82f6</code></td>
+          <td>Active selection, UI accents</td>
+        </tr>
+        <tr>
+          <td><code>--color-anomaly</code></td>
+          <td><code>#f59e0b</code></td>
+          <td>Anomaly alerts (amber)</td>
+        </tr>
+        <tr>
+          <td><code>--font-mono</code></td>
+          <td>JetBrains Mono / Fira Code</td>
+          <td>Monospace font stack</td>
+        </tr>
+      </table>
+
+      <h3>Animations</h3>
+      <p>
+        Ten custom <code>@keyframes</code> animations provide visual feedback
+        without JavaScript overhead:
+      </p>
+
+      <table>
+        <tr>
+          <th>Animation</th>
+          <th>Duration</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td><code>flash-green</code> / <code>flash-red</code></td>
+          <td>600ms</td>
+          <td>Number color flash on price change</td>
+        </tr>
+        <tr>
+          <td>
+            <code>glow-amber</code> / <code>glow-blue</code> /
+            <code>glow-purple</code>
+          </td>
+          <td>2s ∞</td>
+          <td>Panel border glow during anomalies</td>
+        </tr>
+        <tr>
+          <td><code>whisper-in</code></td>
+          <td>400ms</td>
+          <td>Anomaly notification slide-in</td>
+        </tr>
+        <tr>
+          <td><code>pulse-ring</code></td>
+          <td>1.5s ∞</td>
+          <td>Expanding ring on status indicators</td>
+        </tr>
+        <tr>
+          <td><code>slide-down</code></td>
+          <td>300ms</td>
+          <td>New entry in signal feed</td>
+        </tr>
+        <tr>
+          <td><code>heartbeat</code></td>
+          <td>2s ∞</td>
+          <td>Status bar running indicator pulse</td>
+        </tr>
+        <tr>
+          <td><code>row-flash-green</code> / <code>row-flash-red</code></td>
+          <td>800ms</td>
+          <td>Watchlist row highlight on change</td>
+        </tr>
+      </table>
+
+      <!-- ============ 10. PERFORMANCE ============ -->
+      <h2>10. Performance Techniques</h2>
+
+      <div class="callout green">
+        <strong>Core challenge:</strong> 8 instruments × 100ms ticks = 80
+        events/second. Naively re-rendering React on each tick would destroy
+        performance. Encode uses several techniques to maintain smooth 60fps
+        rendering.
+      </div>
+
+      <h3>Non-React Chart Path</h3>
+      <p>
+        The price chart subscribes to the Zustand store via
+        <code>store.subscribe()</code> (not a React hook). When new candle data
+        arrives, it calls <code>series.update(candle)</code> directly on the
+        TradingView canvas — no React reconciliation occurs.
+      </p>
+
+      <h3>Per-Panel Throttling</h3>
+      <p>
+        Each panel independently throttles its re-render frequency based on
+        visual requirements:
+      </p>
+      <table>
+        <tr>
+          <th>Panel</th>
+          <th>Update Interval</th>
+          <th>Rationale</th>
+        </tr>
+        <tr>
+          <td>Price Chart</td>
+          <td>Every tick (100ms)</td>
+          <td>Imperative canvas, no React cost</td>
+        </tr>
+        <tr>
+          <td>Order Book</td>
+          <td>150ms</td>
+          <td>Visual depth bars need responsiveness</td>
+        </tr>
+        <tr>
+          <td>Watchlist</td>
+          <td>250ms</td>
+          <td>Table with 8 rows, moderate cost</td>
+        </tr>
+        <tr>
+          <td>Statistics</td>
+          <td>500ms</td>
+          <td>Numeric display, less urgency</td>
+        </tr>
+        <tr>
+          <td>Tech Analysis</td>
+          <td>1000ms</td>
+          <td>Compute-heavy, changes slowly</td>
+        </tr>
+        <tr>
+          <td>Heatmap</td>
+          <td>1000ms</td>
+          <td>Color transitions smooth over 1s CSS</td>
+        </tr>
+      </table>
+
+      <h3>Batch Warmup</h3>
+      <p>
+        Historical data generation (16,000 ticks for all instruments) is
+        processed in a single <code>processBatch()</code> call that triggers
+        only one Zustand <code>set()</code> — one React notification instead of
+        16,000.
+      </p>
+
+      <h3>O(1) Candle Updates</h3>
+      <p>
+        When a tick falls within the current candle period,
+        <code>RingBuffer.updateLast()</code> modifies the candle in-place rather
+        than clearing and re-pushing the entire buffer.
+      </p>
+
+      <h3>Memoization</h3>
+      <p>
+        <code>AnimatedNumber</code>, <code>SparkLine</code>,
+        <code>Ticker</code>, and watchlist rows are all
+        <code>React.memo</code>-wrapped. Panel elements in the grid are
+        <code>useMemo</code>-ized. This prevents cascade re-renders from parent
+        state changes.
+      </p>
+
+      <!-- ============ 11. INSTRUMENTS ============ -->
+      <h2>11. Instruments &amp; Data</h2>
+
+      <table>
+        <tr>
+          <th>Symbol</th>
+          <th>Name</th>
+          <th>Base Price</th>
+          <th>Volatility</th>
+          <th>Drift</th>
+          <th>Tick Size</th>
+          <th>Sector</th>
+        </tr>
+        <tr>
+          <td>AAPL</td>
+          <td>Apple Inc.</td>
+          <td>$185.00</td>
+          <td>0.25</td>
+          <td>0.08</td>
+          <td>0.01</td>
+          <td>Technology</td>
+        </tr>
+        <tr>
+          <td>MSFT</td>
+          <td>Microsoft Corp.</td>
+          <td>$420.00</td>
+          <td>0.22</td>
+          <td>0.10</td>
+          <td>0.01</td>
+          <td>Technology</td>
+        </tr>
+        <tr>
+          <td>EUR/USD</td>
+          <td>Euro / US Dollar</td>
+          <td>1.0850</td>
+          <td>0.08</td>
+          <td>0.00</td>
+          <td>0.0001</td>
+          <td>Forex</td>
+        </tr>
+        <tr>
+          <td>BTC/USD</td>
+          <td>Bitcoin</td>
+          <td>$67,500</td>
+          <td>0.60</td>
+          <td>0.00</td>
+          <td>1.00</td>
+          <td>Crypto</td>
+        </tr>
+        <tr>
+          <td>SPX</td>
+          <td>S&amp;P 500</td>
+          <td>5,200</td>
+          <td>0.15</td>
+          <td>0.07</td>
+          <td>0.25</td>
+          <td>Index</td>
+        </tr>
+        <tr>
+          <td>TSLA</td>
+          <td>Tesla Inc.</td>
+          <td>$175.00</td>
+          <td>0.55</td>
+          <td>0.05</td>
+          <td>0.01</td>
+          <td>Automotive</td>
+        </tr>
+        <tr>
+          <td>GLD</td>
+          <td>Gold ETF</td>
+          <td>$195.00</td>
+          <td>0.12</td>
+          <td>0.03</td>
+          <td>0.01</td>
+          <td>Commodities</td>
+        </tr>
+        <tr>
+          <td>JPY/USD</td>
+          <td>Yen / US Dollar</td>
+          <td>0.0066</td>
+          <td>0.10</td>
+          <td>0.00</td>
+          <td>0.000001</td>
+          <td>Forex</td>
+        </tr>
+      </table>
+
+      <p>
+        Each instrument also has static fundamental data (market cap, P/E ratio,
+        EPS, dividend yield, revenue, margins, beta, 52-week range) used by the
+        Fundamentals panel.
+      </p>
+
+      <!-- ============ 12. DEPENDENCIES ============ -->
+      <h2>12. Dependencies</h2>
+
+      <h3>Runtime</h3>
+      <table>
+        <tr>
+          <th>Package</th>
+          <th>Version</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td><code>react</code></td>
+          <td>^19.2.4</td>
+          <td>UI framework</td>
+        </tr>
+        <tr>
+          <td><code>react-dom</code></td>
+          <td>^19.2.4</td>
+          <td>DOM renderer</td>
+        </tr>
+        <tr>
+          <td><code>zustand</code></td>
+          <td>^5.0.11</td>
+          <td>Lightweight state management (4 stores)</td>
+        </tr>
+        <tr>
+          <td><code>lightweight-charts</code></td>
+          <td>^5.1.0</td>
+          <td>TradingView charting (canvas-based)</td>
+        </tr>
+        <tr>
+          <td><code>react-grid-layout</code></td>
+          <td>^2.2.2</td>
+          <td>Draggable/resizable panel grid</td>
+        </tr>
+        <tr>
+          <td><code>clsx</code></td>
+          <td>^2.1.1</td>
+          <td>Conditional CSS class composition</td>
+        </tr>
+      </table>
+
+      <h3>Development</h3>
+      <table>
+        <tr>
+          <th>Package</th>
+          <th>Version</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td><code>vite</code></td>
+          <td>^6.2.0</td>
+          <td>Build tool and dev server</td>
+        </tr>
+        <tr>
+          <td><code>typescript</code></td>
+          <td>~5.9.3</td>
+          <td>Type system</td>
+        </tr>
+        <tr>
+          <td><code>tailwindcss</code></td>
+          <td>^4.2.1</td>
+          <td>Utility-first CSS framework</td>
+        </tr>
+        <tr>
+          <td><code>@vitejs/plugin-react</code></td>
+          <td>^4.4.0</td>
+          <td>React HMR for Vite</td>
+        </tr>
+        <tr>
+          <td><code>@tailwindcss/vite</code></td>
+          <td>^4.2.1</td>
+          <td>Tailwind v4 Vite integration</td>
+        </tr>
+        <tr>
+          <td><code>eslint</code></td>
+          <td>^9.39.4</td>
+          <td>Linting</td>
+        </tr>
+        <tr>
+          <td><code>typescript-eslint</code></td>
+          <td>^8.56.1</td>
+          <td>TypeScript-specific lint rules</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
