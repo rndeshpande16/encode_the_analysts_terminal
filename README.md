@@ -1,6 +1,6 @@
 # Encode — The Analyst's Terminal
 
-### [https://encodeterminal.netlify.app/](Click Here) to view the Live Website
+### (Click Here)[https://encodeterminal.netlify.app/] to view the Live Website
 
 A real-time simulated financial market terminal built with React 19, TypeScript, and TradingView's lightweight-charts. Encode simulates live price feeds for 100+ instruments across US and Indian markets, with candlestick charting, order book depth, technical analysis, anomaly detection, and a fully draggable/resizable panel layout — styled after a professional Bloomberg-style trading workstation.
 
