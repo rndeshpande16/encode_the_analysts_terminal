@@ -304,9 +304,11 @@
       <div class="meta">
         <span>Technical Documentation</span>
         <span style="margin-top: 12px; font-size: 9pt"
-          >A simulated financial market terminal with live price generation,<br />
-          candlestick charting, anomaly detection, and draggable panel
-          layout.</span
+          >A multi-market simulated financial terminal with live price
+          generation,<br />
+          candlestick charting, anomaly detection, 12 themes, and a draggable
+          panel layout<br />
+          spanning 100+ instruments across US and Indian markets.</span
         >
         <div class="tags">
           <span class="tag">React 19</span>
@@ -315,6 +317,8 @@
           <span class="tag">Tailwind CSS 4</span>
           <span class="tag">Zustand 5</span>
           <span class="tag">TradingView Charts</span>
+          <span class="tag">US Markets</span>
+          <span class="tag">Indian Markets</span>
         </div>
       </div>
     </div>
@@ -355,8 +359,8 @@
           rendering bottlenecks
         </li>
         <li>
-          <strong>Instruments &amp; Data</strong> — The 8 simulated market
-          instruments
+          <strong>Instruments &amp; Data</strong> — 100+ instruments across US
+          and Indian markets
         </li>
         <li><strong>Dependencies</strong> — Third-party packages</li>
       </ol>
@@ -367,24 +371,32 @@
       <p>
         <strong>Encode</strong> is a single-page web application that simulates
         a real-time financial market terminal, similar in spirit to a Bloomberg
-        Terminal or a trading desk workstation. It generates synthetic price
-        data for 8 financial instruments using Geometric Brownian Motion (GBM),
-        streams the data through multiple interactive panels, and includes a
-        statistical anomaly detection system that alerts the user when unusual
-        market events occur.
+        Terminal or a trading desk workstation. It supports two market modes —
+        <strong>US</strong> (3 indexes + 47 stocks, 50 instruments total) and
+        <strong>Indian</strong> (2 indexes + 50 Nifty 50 stocks) — giving access
+        to over 100 instruments. Prices are generated using Geometric Brownian
+        Motion (GBM), streamed through ten interactive panels, and analyzed by a
+        statistical anomaly detection system that fires real-time alerts for
+        unusual market events. The interface ships with <strong>12 built-in
+        themes</strong> ranging from Midnight and Obsidian to Cyberpunk and Nord.
       </p>
 
       <h3>Key Capabilities</h3>
       <ul>
         <li>
-          <strong>Live price simulation</strong> — 8 instruments tick every
+          <strong>Dual-market simulation</strong> — Switch seamlessly between
+          US and Indian (BSE/NSE) markets; each mode loads its own instrument
+          universe and resets simulation state
+        </li>
+        <li>
+          <strong>Live price simulation</strong> — 100+ instruments tick every
           100ms with realistic stochastic price movement, momentum, and mean
-          reversion
+          reversion via GBM
         </li>
         <li>
           <strong>Candlestick charting</strong> — Full OHLCV charts using
-          TradingView's lightweight-charts library with 15 selectable timeframes
-          (1m through All)
+          TradingView's lightweight-charts library with 16 selectable timeframes
+          (1m through All, including 5D, 10D, 5Y, 10Y, 15Y)
         </li>
         <li>
           <strong>Order book depth</strong> — 10-level bid/ask ladder with
@@ -396,20 +408,29 @@
           volume trend, and momentum (ROC)
         </li>
         <li>
+          <strong>Analyst forecast</strong> — 12-month simulated return history
+          and target price forecasts per instrument
+        </li>
+        <li>
           <strong>Anomaly detection</strong> — Statistical z-score and volume
           ratio analysis fires "whisper" alerts when anomalous events occur
         </li>
         <li>
           <strong>Draggable panel layout</strong> — Bloomberg-style grid with
-          resizable, repositionable panels persisted to localStorage
+          10 resizable, repositionable panels persisted to localStorage
+        </li>
+        <li>
+          <strong>12 themes</strong> — Midnight, Arctic Light, Obsidian, Warm
+          Amber, Ocean Blue, Emerald Forest, Sunset, Cyberpunk, Solarized Dark,
+          Nord, Monokai, High Contrast; all CSS-variable-driven
         </li>
         <li>
           <strong>Performance heatmap</strong> — Color-coded grid showing all
           instrument returns at a glance
         </li>
         <li>
-          <strong>Historical warmup</strong> — Generates ~7 days of synthetic
-          history on startup so charts are immediately populated
+          <strong>Historical warmup</strong> — Generates 2000 synthetic ticks
+          per instrument on startup so charts are immediately populated
         </li>
       </ul>
 
@@ -469,12 +490,18 @@
         <span class="file">anomaly-detector.ts</span> — Z-score detection
         <span class="file">market-engine.ts</span> — Orchestrator
         <span class="file">technical-analysis.ts</span> — 7 indicators
+        <span class="dir">  markets/</span> — Per-market instrument registries
+        <span class="file">  us-market.ts</span> — 3 indexes + 47 US stocks
+        <span class="file">  in-market.ts</span> — 2 indexes + 50 Nifty 50 stocks
+        <span class="file">  index.ts</span> — Market registry / resolver
 
-        <span class="dir"> stores/</span> — Zustand state layer
+        <span class="dir"> stores/</span> — Zustand state layer (6 stores)
         <span class="file">market-store.ts</span> — Ticks, candles, books
         <span class="file">anomaly-store.ts</span> — Whisper queue
         <span class="file">layout-store.ts</span> — Grid persistence
-        <span class="file">selection-store.ts</span> — Active instrument
+        <span class="file">selection-store.ts</span> — Active instrument, market mode
+        <span class="file">theme-store.ts</span> — Active theme + CSS var application
+        <span class="file">watchlist-store.ts</span> — User watchlist (persisted)
 
         <span class="dir"> hooks/</span> — React ↔ Engine bridge
         <span class="file">use-lightweight-chart.ts</span>
@@ -488,7 +515,7 @@
         <span class="file">Panel.tsx</span> — Panel chrome
         <span class="file">StatusBar.tsx</span> — Status info
 
-        <span class="dir"> components/panels/</span> — 8 panels
+        <span class="dir"> components/panels/</span> — 10 panels
         <span class="file">PriceChartPanel.tsx</span>
         <span class="file">OrderBookPanel.tsx</span>
         <span class="file">SignalFeedPanel.tsx</span>
@@ -497,6 +524,7 @@
         <span class="file">WatchlistPanel.tsx</span>
         <span class="file">TechnicalAnalysisPanel.tsx</span>
         <span class="file">FundamentalsPanel.tsx</span>
+        <span class="file">AnalystForecastPanel.tsx</span>
 
         <span class="dir"> components/shared/</span>
         <span class="file">AnimatedNumber.tsx</span>
@@ -509,6 +537,7 @@
         <span class="file">InstrumentSelector.tsx</span>
         <span class="file">TimeframeSelector.tsx</span>
         <span class="file">EngineControls.tsx</span>
+        <span class="file">ThemeSelector.tsx</span>
 
         <span class="dir"> lib/</span> — Utilities
         <span class="file">math.ts</span> — Statistics functions
@@ -516,6 +545,7 @@
         <span class="file">ring-buffer.ts</span> — Circular buffer
         <span class="file">color.ts</span> — HSL interpolation
         <span class="file">throttle.ts</span> — rAF + ms throttle
+        <span class="file">yahoo-finance.ts</span> — Fundamental data fetcher
 
         <span class="dir"> styles/</span>
         <span class="file">animations.css</span> — Keyframes
@@ -582,9 +612,9 @@
       <p>
         Supported timeframes: <code>1m</code>, <code>5m</code>,
         <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>4h</code>,
-        <code>1D</code>, <code>3D</code>, <code>1W</code>, <code>2W</code>,
-        <code>1M</code>, <code>3M</code>, <code>6M</code>, <code>1Y</code>,
-        <code>All</code>.
+        <code>1D</code>, <code>5D</code>, <code>10D</code>, <code>1M</code>,
+        <code>3M</code>, <code>6M</code>, <code>1Y</code>, <code>5Y</code>,
+        <code>10Y</code>, <code>15Y</code>, <code>All</code> — 17 timeframes in total.
       </p>
 
       <h3>4.3 Order Book Simulation (<code>order-book-sim.ts</code>)</h3>
@@ -773,19 +803,19 @@
       <h2>5. State Management</h2>
 
       <p>
-        Four Zustand stores partition the application state by concern. Each
+        Six Zustand stores partition the application state by concern. Each
         store is accessed outside React (via <code>getState()</code>) by the
         engine and inside React (via selector hooks) by components.
       </p>
 
       <h3>5.1 Market Store (<code>market-store.ts</code>)</h3>
-      <p>The central data store. For each of the 8 instruments, maintains:</p>
+      <p>The central data store. For each active instrument, maintains:</p>
       <ul>
         <li><code>lastTick</code> — Most recent price tick</li>
         <li>
           <code>candles</code> — A
           <code>Map&lt;TimeFrame, RingBuffer&lt;Candle&gt;&gt;</code> with
-          500-capacity buffers for each of the 15 timeframes
+          500-capacity buffers for each of the 17 timeframes
         </li>
         <li><code>orderBook</code> — Current 10-level bid/ask depth</li>
         <li><code>tickHistory</code> — Last 2000 ticks in a ring buffer</li>
@@ -812,7 +842,7 @@
       <h3>5.2 Anomaly Store (<code>anomaly-store.ts</code>)</h3>
       <ul>
         <li>
-          <code>anomalies[]</code> — Full history (capped at 100), newest first
+          <code>anomalies[]</code> — Full history (capped at 50), newest first
         </li>
         <li>
           <code>activeWhispers[]</code> — Currently displayed notifications (max
@@ -831,9 +861,29 @@
 
       <h3>5.4 Selection Store (<code>selection-store.ts</code>)</h3>
       <p>
-        Tracks the user's currently active instrument (default:
-        <code>AAPL</code>) and timeframe (default: <code>1m</code>). Changes
-        here drive chart and statistics panel updates.
+        Tracks the user's currently active <strong>market mode</strong> (US or
+        IN, default: <code>US</code>), active instrument (default:
+        <code>AAPL</code>), and active timeframe (default: <code>1m</code>).
+        Switching market mode resets the active instrument to the new market's
+        first symbol and triggers a full engine reload.
+      </p>
+
+      <h3>5.5 Theme Store (<code>theme-store.ts</code>)</h3>
+      <p>
+        Persisted to <code>localStorage</code>. Stores the active
+        <code>themeId</code> (default: <code>midnight</code>) and exposes
+        <code>setTheme(id)</code>. The companion <code>applyTheme()</code>
+        utility writes all 12 CSS custom properties to
+        <code>document.documentElement</code>, instantly re-skinning the entire
+        UI without any React re-render.
+      </p>
+
+      <h3>5.6 Watchlist Store (<code>watchlist-store.ts</code>)</h3>
+      <p>
+        Persisted to <code>localStorage</code>. Maintains the user's
+        personalized list of watched symbols. Resets to the current market's
+        default symbols when the market mode is switched, preventing stale
+        cross-market entries.
       </p>
 
       <!-- ============ 6. UI COMPONENTS ============ -->
@@ -880,7 +930,7 @@
           <p>
             TradingView candlestick chart with volume histogram overlay. Uses
             the <code>useLightweightChart</code> hook for imperative canvas
-            updates, bypassing React rendering entirely. Supports all 15
+            updates, bypassing React rendering entirely. Supports all 17
             timeframes.
           </p>
         </div>
@@ -895,9 +945,9 @@
         <div class="panel-card">
           <h4>WatchlistPanel</h4>
           <p>
-            Table of all 8 instruments with live price, change%, volume, and SVG
+            Table of watched instruments with live price, change%, volume, and SVG
             sparklines (last 50 ticks). Rows flash green/red on price changes.
-            Click to select instrument. Updates every 250ms.
+            Click to select instrument. Add/remove symbols from the watchlist. Updates every 250ms.
           </p>
         </div>
         <div class="panel-card">
@@ -928,10 +978,10 @@
         <div class="panel-card">
           <h4>HeatmapPanel</h4>
           <p>
-            4-column grid of all instruments, color-coded by performance
-            relative to base price. Green = gains, red = losses, intensity
-            scaled to magnitude (±5% saturation). Updates every 1 second with 1s
-            CSS transition.
+            Grid of all instruments in the active market, color-coded by
+            performance relative to base price. Green = gains, red = losses,
+            intensity scaled to magnitude (±5% saturation). Updates every 1
+            second with 1s CSS transition.
           </p>
         </div>
         <div class="panel-card">
@@ -941,6 +991,15 @@
             marker, and a metrics grid (market cap, P/E, EPS, dividend yield,
             revenue, profit margins, etc.). Conditionally renders metrics based
             on instrument type.
+          </p>
+        </div>
+        <div class="panel-card">
+          <h4>AnalystForecastPanel</h4>
+          <p>
+            Displays the last 12 months of simulated monthly returns as a bar
+            chart alongside a target price forecast. Provides a forward-looking
+            price estimate and analyst consensus rating for the selected
+            instrument.
           </p>
         </div>
       </div>
@@ -978,8 +1037,8 @@
 
       <ul>
         <li>
-          <strong>InstrumentSelector</strong> — Styled dropdown of all 8
-          instruments
+          <strong>InstrumentSelector</strong> — Searchable dropdown of all
+          instruments in the active market; grouped by index and sector
         </li>
         <li>
           <strong>TimeframeSelector</strong> — Button bar for short timeframes
@@ -987,7 +1046,11 @@
         </li>
         <li>
           <strong>EngineControls</strong> — Play/Pause toggle + speed buttons
-          (0.5×, 1×, 2×, 5×)
+          (0.1×, 0.5×, 1×, 2×, 5×, 10×) + US/IN market switcher
+        </li>
+        <li>
+          <strong>ThemeSelector</strong> — Dropdown to switch between 12
+          built-in themes; applies CSS variables instantly without page reload
         </li>
       </ul>
 
@@ -1098,61 +1161,53 @@
 
       <h3>Theme</h3>
       <p>
-        Dark terminal aesthetic using Tailwind CSS v4's
-        <code>@theme</code> directive for CSS custom properties:
+        Encode ships with <strong>12 built-in themes</strong>, all driven by
+        Tailwind CSS v4's <code>@theme</code> directive. The active theme is
+        applied by writing CSS custom properties to
+        <code>document.documentElement</code> via <code>applyTheme()</code> in
+        <code>theme-store.ts</code>:
       </p>
 
       <table>
         <tr>
+          <th>Theme ID</th>
+          <th>Display Name</th>
+          <th>Character</th>
+        </tr>
+        <tr><td><code>midnight</code></td><td>Midnight</td><td>Dark navy — the default terminal aesthetic</td></tr>
+        <tr><td><code>arctic</code></td><td>Arctic Light</td><td>Bright white / light mode</td></tr>
+        <tr><td><code>obsidian</code></td><td>Obsidian</td><td>Pure black with zinc grays</td></tr>
+        <tr><td><code>warm-amber</code></td><td>Warm Amber</td><td>Warm brown / amber accent tones</td></tr>
+        <tr><td><code>ocean-blue</code></td><td>Ocean Blue</td><td>Deep navy with cyan/sky accents</td></tr>
+        <tr><td><code>emerald-forest</code></td><td>Emerald Forest</td><td>Dark green base with teal highlights</td></tr>
+        <tr><td><code>sunset</code></td><td>Sunset</td><td>Deep magenta / purple-pink palette</td></tr>
+        <tr><td><code>cyberpunk</code></td><td>Cyberpunk</td><td>Black with neon green/magenta/cyan</td></tr>
+        <tr><td><code>solarized-dark</code></td><td>Solarized Dark</td><td>Classic Solarized dark palette</td></tr>
+        <tr><td><code>nord</code></td><td>Nord</td><td>Arctic Nord blue-gray palette</td></tr>
+        <tr><td><code>monokai</code></td><td>Monokai</td><td>Classic Monokai editor colors</td></tr>
+        <tr><td><code>high-contrast</code></td><td>High Contrast</td><td>Pure black with maximum contrast</td></tr>
+      </table>
+
+      <p>Each theme defines these CSS custom properties:</p>
+
+      <table>
+        <tr>
           <th>Variable</th>
-          <th>Value</th>
-          <th>Usage</th>
+          <th>Purpose</th>
         </tr>
-        <tr>
-          <td><code>--color-terminal-bg</code></td>
-          <td><code>#0a0e17</code></td>
-          <td>Page background (very dark navy)</td>
-        </tr>
-        <tr>
-          <td><code>--color-terminal-surface</code></td>
-          <td><code>#111827</code></td>
-          <td>Elevated surfaces</td>
-        </tr>
-        <tr>
-          <td><code>--color-terminal-panel</code></td>
-          <td><code>#1a2332</code></td>
-          <td>Panel backgrounds</td>
-        </tr>
-        <tr>
-          <td><code>--color-terminal-border</code></td>
-          <td><code>#1e293b</code></td>
-          <td>Borders and separators</td>
-        </tr>
-        <tr>
-          <td><code>--color-positive</code></td>
-          <td><code>#22c55e</code></td>
-          <td>Price increase, buy signals</td>
-        </tr>
-        <tr>
-          <td><code>--color-negative</code></td>
-          <td><code>#ef4444</code></td>
-          <td>Price decrease, sell signals</td>
-        </tr>
-        <tr>
-          <td><code>--color-neutral</code></td>
-          <td><code>#3b82f6</code></td>
-          <td>Active selection, UI accents</td>
-        </tr>
-        <tr>
-          <td><code>--color-anomaly</code></td>
-          <td><code>#f59e0b</code></td>
-          <td>Anomaly alerts (amber)</td>
-        </tr>
-        <tr>
-          <td><code>--font-mono</code></td>
-          <td>JetBrains Mono / Fira Code</td>
-          <td>Monospace font stack</td>
-        </tr>
+        <tr><td><code>--color-terminal-bg</code></td><td>Page background</td></tr>
+        <tr><td><code>--color-terminal-surface</code></td><td>Elevated surfaces</td></tr>
+        <tr><td><code>--color-terminal-panel</code></td><td>Panel backgrounds</td></tr>
+        <tr><td><code>--color-terminal-border</code></td><td>Borders and separators</td></tr>
+        <tr><td><code>--color-positive</code></td><td>Price increase, buy signals</td></tr>
+        <tr><td><code>--color-negative</code></td><td>Price decrease, sell signals</td></tr>
+        <tr><td><code>--color-neutral</code></td><td>Active selection, UI accents</td></tr>
+        <tr><td><code>--color-anomaly</code></td><td>Anomaly alerts</td></tr>
+        <tr><td><code>--color-anomaly-glow</code></td><td>Panel glow during anomalies</td></tr>
+        <tr><td><code>--color-text-primary</code></td><td>Primary text</td></tr>
+        <tr><td><code>--color-text-secondary</code></td><td>Secondary / muted text</td></tr>
+        <tr><td><code>--color-text-muted</code></td><td>Dimmed labels</td></tr>
+        <tr><td><code>--font-mono</code></td><td>JetBrains Mono / Fira Code stack</td></tr>
       </table>
 
       <h3>Animations</h3>
@@ -1211,10 +1266,10 @@
       <h2>10. Performance Techniques</h2>
 
       <div class="callout green">
-        <strong>Core challenge:</strong> 8 instruments × 100ms ticks = 80
-        events/second. Naively re-rendering React on each tick would destroy
-        performance. Encode uses several techniques to maintain smooth 60fps
-        rendering.
+        <strong>Core challenge:</strong> 50+ active instruments × 100ms ticks
+        = 500+ events/second at full speed. Naively re-rendering React on each
+        tick would destroy performance. Encode uses several techniques to
+        maintain smooth 60fps rendering.
       </div>
 
       <h3>Non-React Chart Path</h3>
@@ -1270,10 +1325,10 @@
 
       <h3>Batch Warmup</h3>
       <p>
-        Historical data generation (16,000 ticks for all instruments) is
-        processed in a single <code>processBatch()</code> call that triggers
-        only one Zustand <code>set()</code> — one React notification instead of
-        16,000.
+        Historical data generation (2000 ticks × all active instruments,
+        e.g. 100,000 ticks for US mode) is processed in a single
+        <code>processBatch()</code> call that triggers only one Zustand
+        <code>set()</code> — one React notification instead of 100,000.
       </p>
 
       <h3>O(1) Candle Updates</h3>
@@ -1295,94 +1350,68 @@
       <!-- ============ 11. INSTRUMENTS ============ -->
       <h2>11. Instruments &amp; Data</h2>
 
+      <p>
+        Encode supports two market modes, each with its own instrument universe.
+        The active set is loaded by the engine on startup or on market-mode switch.
+      </p>
+
+      <h3>US Market (50 Instruments)</h3>
+      <p>3 indexes and 47 stocks spanning mega-cap tech, financials, energy, healthcare, and consumer sectors.</p>
+
       <table>
         <tr>
           <th>Symbol</th>
           <th>Name</th>
           <th>Base Price</th>
           <th>Volatility</th>
-          <th>Drift</th>
-          <th>Tick Size</th>
+          <th>Type</th>
+        </tr>
+        <tr><td>SPX</td><td>S&amp;P 500</td><td>5,200</td><td>0.14</td><td>Index</td></tr>
+        <tr><td>DJI</td><td>Dow Jones Industrial</td><td>38,500</td><td>0.15</td><td>Index</td></tr>
+        <tr><td>IXIC</td><td>Nasdaq Composite</td><td>16,400</td><td>0.18</td><td>Index</td></tr>
+        <tr><td>AAPL</td><td>Apple Inc.</td><td>$185</td><td>0.24</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>MSFT</td><td>Microsoft Corporation</td><td>$420</td><td>0.23</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>GOOGL</td><td>Alphabet Inc.</td><td>$155</td><td>0.26</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>AMZN</td><td>Amazon.com Inc.</td><td>$180</td><td>0.28</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>NVDA</td><td>NVIDIA Corporation</td><td>$880</td><td>0.55</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>META</td><td>Meta Platforms</td><td>$500</td><td>0.32</td><td>Mega-Cap Tech</td></tr>
+        <tr><td>TSLA</td><td>Tesla Inc.</td><td>$175</td><td>0.55</td><td>Automotive/Tech</td></tr>
+        <tr><td>BRK.B</td><td>Berkshire Hathaway</td><td>$370</td><td>0.16</td><td>Financials</td></tr>
+        <tr><td>JPM</td><td>JPMorgan Chase</td><td>$195</td><td>0.22</td><td>Financials</td></tr>
+        <tr><td>V</td><td>Visa Inc.</td><td>$275</td><td>0.20</td><td>Financials</td></tr>
+        <tr><td>UNH</td><td>UnitedHealth Group</td><td>$520</td><td>0.21</td><td>Healthcare</td></tr>
+        <tr><td>XOM</td><td>ExxonMobil Corp.</td><td>$105</td><td>0.24</td><td>Energy</td></tr>
+        <tr><td colspan="5" style="color: var(--muted); font-style: italic; text-align: center;">+ 35 additional US stocks (WMT, JNJ, PG, HD, MA, BAC, ABBV, CVX, MRK, LLY, PEP, KO, AVGO, COST, MCD, AMD, INTC, QCOM, CRM, ORCL, NFLX, DIS, BA, CAT, GE, F, GM, GS, MS, C, WFC, AXP, USB, TGT, LOW)</td></tr>
+      </table>
+
+      <h3>Indian Market (52 Instruments)</h3>
+      <p>2 indexes and 50 Nifty 50 stocks across IT, banking, pharma, FMCG, energy, and infrastructure.</p>
+
+      <table>
+        <tr>
+          <th>Symbol</th>
+          <th>Name</th>
+          <th>Base Price (₹)</th>
+          <th>Volatility</th>
           <th>Sector</th>
         </tr>
-        <tr>
-          <td>AAPL</td>
-          <td>Apple Inc.</td>
-          <td>$185.00</td>
-          <td>0.25</td>
-          <td>0.08</td>
-          <td>0.01</td>
-          <td>Technology</td>
-        </tr>
-        <tr>
-          <td>MSFT</td>
-          <td>Microsoft Corp.</td>
-          <td>$420.00</td>
-          <td>0.22</td>
-          <td>0.10</td>
-          <td>0.01</td>
-          <td>Technology</td>
-        </tr>
-        <tr>
-          <td>EUR/USD</td>
-          <td>Euro / US Dollar</td>
-          <td>1.0850</td>
-          <td>0.08</td>
-          <td>0.00</td>
-          <td>0.0001</td>
-          <td>Forex</td>
-        </tr>
-        <tr>
-          <td>BTC/USD</td>
-          <td>Bitcoin</td>
-          <td>$67,500</td>
-          <td>0.60</td>
-          <td>0.00</td>
-          <td>1.00</td>
-          <td>Crypto</td>
-        </tr>
-        <tr>
-          <td>SPX</td>
-          <td>S&amp;P 500</td>
-          <td>5,200</td>
-          <td>0.15</td>
-          <td>0.07</td>
-          <td>0.25</td>
-          <td>Index</td>
-        </tr>
-        <tr>
-          <td>TSLA</td>
-          <td>Tesla Inc.</td>
-          <td>$175.00</td>
-          <td>0.55</td>
-          <td>0.05</td>
-          <td>0.01</td>
-          <td>Automotive</td>
-        </tr>
-        <tr>
-          <td>GLD</td>
-          <td>Gold ETF</td>
-          <td>$195.00</td>
-          <td>0.12</td>
-          <td>0.03</td>
-          <td>0.01</td>
-          <td>Commodities</td>
-        </tr>
-        <tr>
-          <td>JPY/USD</td>
-          <td>Yen / US Dollar</td>
-          <td>0.0066</td>
-          <td>0.10</td>
-          <td>0.00</td>
-          <td>0.000001</td>
-          <td>Forex</td>
-        </tr>
+        <tr><td>SENSEX</td><td>BSE Sensex</td><td>74,000</td><td>0.15</td><td>Index</td></tr>
+        <tr><td>NIFTY50</td><td>Nifty 50</td><td>22,500</td><td>0.16</td><td>Index</td></tr>
+        <tr><td>RELIANCE</td><td>Reliance Industries Ltd.</td><td>₹2,500</td><td>0.28</td><td>Energy / Conglomerate</td></tr>
+        <tr><td>TCS</td><td>Tata Consultancy Services</td><td>₹3,800</td><td>0.22</td><td>IT Services</td></tr>
+        <tr><td>HDFCBANK</td><td>HDFC Bank Ltd.</td><td>₹1,650</td><td>0.26</td><td>Banking</td></tr>
+        <tr><td>INFY</td><td>Infosys Ltd.</td><td>₹1,500</td><td>0.24</td><td>IT Services</td></tr>
+        <tr><td>ICICIBANK</td><td>ICICI Bank Ltd.</td><td>₹1,200</td><td>0.28</td><td>Banking</td></tr>
+        <tr><td>HINDUNILVR</td><td>Hindustan Unilever Ltd.</td><td>₹2,400</td><td>0.18</td><td>FMCG</td></tr>
+        <tr><td colspan="5" style="color: var(--muted); font-style: italic; text-align: center;">+ 44 additional Nifty 50 stocks (ITC, KOTAKBANK, LT, AXISBANK, BAJFINANCE, BHARTIARTL, ASIANPAINT, MARUTI, SUNPHARMA, TATAMOTORS, WIPRO, HCLTECH, TITAN, NTPC, POWERGRID, NESTLEIND, TECHM, ULTRACEMCO, BAJAJ-AUTO, JSWSTEEL, TATASTEEL, GRASIM, ADANIENT, ADANIPORTS, COALINDIA, CIPLA, DRREDDY, DIVISLAB, APOLLOHOSP, BPCL, EICHERMOT, HEROMOTOCO, HINDALCO, INDUSINDBK, IOC, M&amp;M, ONGC, SBIN, SHREECEM, TATACONSUM, UPL, VEDL, BRITANNIA, PIDILITIND)</td></tr>
       </table>
 
       <p>
-        Each instrument also has static fundamental data (market cap, P/E ratio,
+        Each instrument carries static fundamental data (market cap, P/E ratio,
         EPS, dividend yield, revenue, margins, beta, 52-week range) used by the
-        Fundamentals panel.
+        Fundamentals panel. US fundamentals are sourced via the
+        <code>yahoo-finance.ts</code> integration; Indian fundamentals use
+        curated static values.
       </p>
 
       <!-- ============ 12. DEPENDENCIES ============ -->
