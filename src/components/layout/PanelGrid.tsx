@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { ResponsiveGridLayout, useContainerWidth } from "react-grid-layout";
 import type { Layout, ResponsiveLayouts } from "react-grid-layout";
 import { useLayoutStore } from "../../stores/layout-store.ts";
@@ -38,6 +38,9 @@ export function PanelGrid() {
   const layouts = useLayoutStore((s) => s.layouts);
   const updateLayouts = useLayoutStore((s) => s.updateLayouts);
   const { width, containerRef } = useContainerWidth({ initialWidth: 1280 });
+  const [breakpoint, setBreakpoint] = useState<string>("lg");
+
+  const isDesktop = breakpoint === "lg";
 
   const handleLayoutChange = useCallback(
     (_layout: Layout, allLayouts: ResponsiveLayouts) => {
@@ -46,20 +49,27 @@ export function PanelGrid() {
     [updateLayouts],
   );
 
+  const handleBreakpointChange = useCallback((newBreakpoint: string) => {
+    setBreakpoint(newBreakpoint);
+  }, []);
+
   const panelElements = useMemo(
     () =>
       PANELS.map(({ id, title, Component }) => (
         <div key={id}>
-          <Panel title={title} panelId={id}>
+          <Panel title={title} panelId={id} isDraggable={isDesktop}>
             <Component />
           </Panel>
         </div>
       )),
-    [],
+    [isDesktop],
   );
 
   return (
-    <div ref={containerRef} className="h-full overflow-x-hidden overflow-y-auto">
+    <div
+      ref={containerRef}
+      className="h-full overflow-x-hidden overflow-y-auto"
+    >
       {width > 0 && (
         <ResponsiveGridLayout
           width={width}
@@ -70,7 +80,13 @@ export function PanelGrid() {
           margin={[6, 6] as const}
           containerPadding={[6, 6] as const}
           onLayoutChange={handleLayoutChange}
-          dragConfig={{ handle: ".panel-drag-handle" }}
+          onBreakpointChange={handleBreakpointChange}
+          dragConfig={
+            isDesktop
+              ? { handle: ".panel-drag-handle" }
+              : { enabled: false }
+          }
+          resizeConfig={isDesktop ? undefined : { enabled: false }}
         >
           {panelElements}
         </ResponsiveGridLayout>

@@ -26,12 +26,12 @@ export function Terminal({
   return (
     <div className="flex h-full max-w-full flex-col overflow-x-hidden">
       {/* Header */}
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-4 py-2">
-        <div className="flex min-w-0 flex-wrap items-center gap-3">
-          <h1 className="text-sm font-semibold tracking-widest text-slate-300 uppercase">
-            Encode Terminal
+      <header className="flex flex-wrap items-center justify-between gap-1 border-b border-[var(--color-terminal-border)] bg-[var(--color-terminal-surface)] px-2 py-1.5 sm:gap-2 sm:px-4 sm:py-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-3">
+          <h1 className="text-xs font-semibold tracking-widest text-slate-300 uppercase sm:text-sm">
+            Encode
           </h1>
-          <div className="h-4 w-px bg-slate-700" />
+          <div className="hidden h-4 w-px bg-slate-700 sm:block" />
 
           {/* Market Toggle */}
           <div className="flex overflow-hidden rounded border border-slate-700 text-[10px] font-medium">
@@ -57,11 +57,11 @@ export function Terminal({
             </button>
           </div>
 
-          <div className="h-4 w-px bg-slate-700" />
+          <div className="hidden h-4 w-px bg-slate-700 sm:block" />
           <InstrumentSelector />
           <TimeframeSelector />
         </div>
-        <div className="flex min-w-0 flex-wrap items-center gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-3">
           <ThemeSelector />
           <EngineControls
             status={engineStatus}
